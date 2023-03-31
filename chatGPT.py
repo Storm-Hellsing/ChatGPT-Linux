@@ -1,6 +1,7 @@
 import openai
 import readline
 import os
+import time
 
 print("                                                                                                                                                ")
 print("        CCCCCCCCCCCCChhhhhhh                                       tttt                 GGGGGGGGGGGGGPPPPPPPPPPPPPPPPP   TTTTTTTTTTTTTTTTTTTTTTT")
@@ -53,18 +54,24 @@ def get_response(prompt):
         stop=None,
         temperature=0.7
     )
-    message = response.choices[0].text
-    return message.strip()
+    message = response.choices[0].text.strip()
+
+    #typing effect
+    print(GOLD + "ChatGPT: " + RESET, end = "")
+    for char in message:
+        print(char, end = "", flush = True)
+        time.sleep(0.03)
+    
+    print("\n")
+    return message
 
 while True:
     try:
         prompt = input(BLUE + username + ": " + RESET)
-        response = get_response(prompt)
         print()
+        response = get_response(prompt)
         chat_history.append(f"{BLUE}{username}:{RESET} {prompt}\n{GOLD}ChatGPT: {RESET}{response}\n")
         with open(chat_history_file, "w") as f:
             f.writelines(chat_history)
-        print(GOLD + "ChatGPT: " + RESET + response)
-        print()
     except (KeyboardInterrupt, EOFError, SystemExit):
         break
